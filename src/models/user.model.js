@@ -1,6 +1,9 @@
 import mongoose,{Schema}  from "mongoose";
 import jwt from "jsonwebtoken"
 import bcrypt from 'bcrypt';
+import dotenv from "dotenv";
+
+dotenv.config();
 // pre hook
 
 const userSchema = new Schema(
@@ -13,7 +16,7 @@ const userSchema = new Schema(
             trim:true,
             index:true
         },
-        username:{
+        email:{
             type:String,
             required :true,
             unique:true,
@@ -68,8 +71,9 @@ userSchema.methods.generateAccessToken = function(){
             username:this.username,
             fullName:this.fullName
         },
-        process.env.ACCESS_TOKEN_SECRET,{
-            expiresIn:ACCESS_TOKEN_EXPIRY
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+           expiresIn:process.env.ACCESS_TOKEN_EXPIRY
         }
     )
 }
@@ -79,7 +83,7 @@ userSchema.methods.generateRefreshToken = function(){
             _id:this._id
         },
         process.env.REFRESH_TOKEN_SECRET,{
-            expiresIn:REFRESH_TOKEN_EXPIRY
+            expiresIn:process.env.REFRESH_TOKEN_EXPIRY
         }
     )
 }
